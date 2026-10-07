@@ -1,17 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, Check, ShieldCheck, X } from "lucide-react";
-import { FLIGHT } from "../domain/checkIn";
+import {
+  ASSETS,
+  FLIGHT,
+  LEFT_TEAR,
+  RIGHT_TEAR,
+  SECURITY_TIMELINE,
+} from "../consts";
 import SecuritySirens from "./SecuritySirens";
 import "./SecurityCheckDialog.css";
 
 type SecurityPhase = "arriving" | "torn" | "gate";
-
-// The tear bends around the GATE field, keeping its revealed number on the left.
-const LEFT_TEAR =
-  "polygon(0 0, 50% 0, 49.3% 7%, 50.8% 15%, 49.1% 23%, 50.3% 32%, 48.9% 41%, 50.6% 48%, 51.9% 57%, 52.8% 64%, 52% 72%, 49.2% 79%, 50.8% 87%, 49.4% 94%, 50% 100%, 0 100%)";
-const RIGHT_TEAR =
-  "polygon(50% 0, 100% 0, 100% 100%, 50% 100%, 49.4% 94%, 50.8% 87%, 49.2% 79%, 52% 72%, 52.8% 64%, 51.9% 57%, 50.6% 48%, 48.9% 41%, 50.3% 32%, 49.1% 23%, 50.8% 15%, 49.3% 7%)";
 
 export default function SecurityCheckDialog({
   onClose,
@@ -23,7 +23,7 @@ export default function SecurityCheckDialog({
   const reducedMotion = useReducedMotion();
   const [sequencePhase, setSequencePhase] = useState<SecurityPhase>("arriving");
   const phase = reducedMotion ? "gate" : sequencePhase;
-  const ticketImage = `${import.meta.env.BASE_URL}ticket.jpg`;
+  const ticketImage = `${import.meta.env.BASE_URL}${ASSETS.ticket}`;
   const isTorn = phase !== "arriving";
   const isGate = phase === "gate";
 
@@ -55,8 +55,14 @@ export default function SecurityCheckDialog({
 
   useEffect(() => {
     if (reducedMotion) return;
-    const tearTimer = window.setTimeout(() => setSequencePhase("torn"), 1050);
-    const gateTimer = window.setTimeout(() => setSequencePhase("gate"), 2050);
+    const tearTimer = window.setTimeout(
+      () => setSequencePhase("torn"),
+      SECURITY_TIMELINE.tearMs,
+    );
+    const gateTimer = window.setTimeout(
+      () => setSequencePhase("gate"),
+      SECURITY_TIMELINE.gateMs,
+    );
     return () => {
       window.clearTimeout(tearTimer);
       window.clearTimeout(gateTimer);

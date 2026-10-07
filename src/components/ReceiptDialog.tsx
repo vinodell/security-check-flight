@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion } from "motion/react";
 import { ArrowUpRight, FileText, Plane, X } from "lucide-react";
-import { EXPECTED_BOOKING, FLIGHT } from "../domain/checkIn";
+import { EXPECTED_BOOKING, FLIGHT } from "../consts";
 import { formatDate } from "../domain/formatDate";
 
 export default function ReceiptDialog({
@@ -82,11 +82,17 @@ export default function ReceiptDialog({
             </span>
           </div>
           <div className="receipt-route">
-            <strong>{FLIGHT.originCode}</strong>
+            <div className="receipt-airport">
+              <strong>{FLIGHT.originCode}</strong>
+              <small>{FLIGHT.originCity}</small>
+            </div>
             <span className="receipt-route-line">
               <Plane size={19} />
             </span>
-            <strong>{FLIGHT.destinationCode}</strong>
+            <div className="receipt-airport">
+              <strong>{FLIGHT.destinationCode}</strong>
+              <small>{FLIGHT.destinationCity}</small>
+            </div>
           </div>
           <dl className="receipt-data">
             <div className="receipt-data-full">

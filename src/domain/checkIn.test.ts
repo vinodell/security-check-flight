@@ -3,11 +3,9 @@ import {
   EXPECTED_BOOKING,
   INITIAL_CHECK_IN_DATA,
   STEP_FIELDS,
-  matchesBooking,
-  validateStep,
-  type CheckInData,
-  type CheckInStep,
-} from "./checkIn";
+} from "../consts";
+import { matchesBooking, validateStep } from "./checkIn";
+import type { CheckInData, CheckInStep } from "./types";
 
 describe("single-booking check-in", () => {
   it("accepts the configured booking and validates each completed block", () => {
@@ -22,11 +20,52 @@ describe("single-booking check-in", () => {
       ...EXPECTED_BOOKING,
       lastName: `  ${EXPECTED_BOOKING.lastName.toLocaleLowerCase("ru-RU")}  `,
       firstName: `\t${EXPECTED_BOOKING.firstName.toLocaleUpperCase("ru-RU")}\n`,
-      middleName: EXPECTED_BOOKING.middleName.toLocaleLowerCase("ru-RU").replace(/е/g, "ё"),
+      middleName: EXPECTED_BOOKING.middleName
+        .toLocaleLowerCase("ru-RU")
+        .replace(/е/g, "ё"),
       flightNumber: ` ${EXPECTED_BOOKING.flightNumber.toLowerCase().replace(/\s/g, "").split("").join("\t")} `,
       bookingCode: ` ${EXPECTED_BOOKING.bookingCode.toLowerCase()} `,
     };
     expect(matchesBooking(data)).toBe(true);
+  });
+
+  it("accepts the configured short name in the existing first-name field", () => {
+    for (const firstName of [
+      EXPECTED_BOOKING.shortName,
+      EXPECTED_BOOKING.shortName.toLocaleLowerCase("ru-RU"),
+      `\t ${EXPECTED_BOOKING.shortName.toLocaleUpperCase("ru-RU")} \n`,
+    ]) {
+      const data: CheckInData = { ...EXPECTED_BOOKING, firstName };
+      expect(validateStep("passenger", data), firstName).toEqual({});
+      expect(matchesBooking(data), firstName).toBe(true);
+    }
+  });
+
+  it("rejects unconfigured short names and malformed first names", () => {
+    for (const firstName of ["Саш", "Алекс", "Мария", "Са ша", "Саша1"]) {
+      const data: CheckInData = { ...EXPECTED_BOOKING, firstName };
+      expect(
+        validateStep("passenger", data).firstName,
+        firstName,
+      ).toBeDefined();
+      expect(matchesBooking(data), firstName).toBe(false);
+    }
+  });
+
+  it("keeps every other booking field required when using the short name", () => {
+    const data: CheckInData = {
+      ...EXPECTED_BOOKING,
+      firstName: EXPECTED_BOOKING.shortName,
+    };
+    for (const field of Object.values(STEP_FIELDS).flat()) {
+      if (field === "firstName") continue;
+      expect(matchesBooking({ ...data, [field]: "" }), field).toBe(false);
+    }
+    expect(matchesBooking({ ...data, lastName: "Иванов" })).toBe(false);
+    expect(matchesBooking({ ...data, middleName: "Александрович" })).toBe(
+      false,
+    );
+    expect(matchesBooking({ ...data, bookingCode: "OTHER1" })).toBe(false);
   });
 
   it("validates one block independently of the unfinished blocks", () => {

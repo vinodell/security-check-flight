@@ -26,11 +26,12 @@ import {
   FLIGHT,
   GLOBE_ROUTE,
   INITIAL_CHECK_IN_DATA,
-  matchesBooking,
+  GLOBE_LOAD_DELAY_MS,
   STEP_FIELDS,
-  validateStep,
-} from "./domain/checkIn";
-import type { CheckInData, CheckInErrors, CheckInStep } from "./domain/checkIn";
+  STEPS,
+} from "./consts";
+import { matchesBooking, validateStep } from "./domain/checkIn";
+import type { CheckInData, CheckInErrors } from "./domain/types";
 import { formatShortDate } from "./domain/formatDate";
 import FormField from "./components/FormField";
 import ReceiptDialog from "./components/ReceiptDialog";
@@ -41,36 +42,6 @@ import DesktopRequiredDialog from "./components/DesktopRequiredDialog";
 import { useIsPhone } from "./hooks/useIsPhone";
 
 const GlobeScene = lazy(() => import("./components/GlobeScene"));
-
-const STEPS: {
-  id: CheckInStep;
-  label: string;
-  title: string;
-  description: string;
-  icon: typeof UserRound;
-}[] = [
-  {
-    id: "passenger",
-    label: "Пассажир",
-    title: "Давайте знакомиться.",
-    description: "Введите данные пассажира, как в маршрутной квитанции.",
-    icon: UserRound,
-  },
-  {
-    id: "flight",
-    label: "Рейс",
-    title: "Найдём ваш рейс.",
-    description: "Номер рейса и код брони — ваш ключ к путешествию.",
-    icon: Plane,
-  },
-  {
-    id: "document",
-    label: "Документ",
-    title: "Последняя проверка.",
-    description: "Подтвердите документ. До посадочного талона — один шаг.",
-    icon: ShieldCheck,
-  },
-];
 
 function App() {
   const reducedMotion = useReducedMotion();
@@ -86,11 +57,19 @@ function App() {
   const formRef = useRef<HTMLFormElement>(null);
   const previousStep = useRef(0);
   const step = STEPS[stepIndex] ?? STEPS[0]!;
-  const StepIcon = step.icon;
+  const StepIcon =
+    step.id === "passenger"
+      ? UserRound
+      : step.id === "flight"
+        ? Plane
+        : ShieldCheck;
 
   useEffect(() => {
     if (isPhone) return;
-    const timer = window.setTimeout(() => setLoadGlobe(true), 200);
+    const timer = window.setTimeout(
+      () => setLoadGlobe(true),
+      GLOBE_LOAD_DELAY_MS,
+    );
     return () => window.clearTimeout(timer);
   }, [isPhone]);
 
@@ -392,7 +371,7 @@ function App() {
                                   <FormField
                                     name="lastName"
                                     label="Фамилия"
-                                    placeholder={`Например, ${EXPECTED_BOOKING.lastName}`}
+                                    placeholder={`Например, свою`}
                                     autoComplete="family-name"
                                     value={data.lastName}
                                     onChange={changeField}
@@ -402,7 +381,7 @@ function App() {
                                   <FormField
                                     name="firstName"
                                     label="Имя"
-                                    placeholder={`Например, ${EXPECTED_BOOKING.firstName}`}
+                                    placeholder={`Можно даже короткий вариант`}
                                     autoComplete="given-name"
                                     value={data.firstName}
                                     onChange={changeField}
@@ -437,7 +416,7 @@ function App() {
                                   <FormField
                                     name="flightNumber"
                                     label="Номер рейса"
-                                    placeholder={EXPECTED_BOOKING.flightNumber}
+                                    placeholder={"XXX 000"}
                                     autoComplete="off"
                                     value={data.flightNumber}
                                     onChange={changeField}

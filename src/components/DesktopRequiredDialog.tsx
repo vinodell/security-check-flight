@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { Check, Copy, Monitor, ShieldAlert } from "lucide-react";
+import { ASSETS } from "../consts";
 import SecuritySirens from "./SecuritySirens";
 import "./SecurityCheckDialog.css";
 import "./DesktopRequiredDialog.css";
@@ -93,7 +94,7 @@ export default function DesktopRequiredDialog() {
           <SecuritySirens />
           <figure className="desktop-required-photo">
             <img
-              src={`${import.meta.env.BASE_URL}security.jpg`}
+              src={`${import.meta.env.BASE_URL}${ASSETS.securityPortrait}`}
               width="300"
               height="203"
               alt="Сотрудник службы безопасности"

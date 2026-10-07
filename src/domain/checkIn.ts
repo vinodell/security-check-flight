@@ -1,87 +1,12 @@
-export type CheckInData = {
-  lastName: string;
-  firstName: string;
-  middleName: string;
-  birthDate: string;
-  flightNumber: string;
-  bookingCode: string;
-  departureDate: string;
-  passportLastFour: string;
-};
+import {
+  EXPECTED_BOOKING,
+  MISMATCH_ERROR,
+  REQUIRED_ERRORS,
+  STEP_FIELDS,
+} from "../consts";
+import type { CheckInData, CheckInErrors, CheckInStep } from "./types";
 
-export type CheckInStep = "passenger" | "flight" | "document";
-
-/** The single booking accepted by this local mini-game. */
-export const EXPECTED_BOOKING = {
-  lastName: "Васильев",
-  firstName: "Александр",
-  middleName: "Олегович",
-  birthDate: "1991-12-19",
-  flightNumber: "AVA 303",
-  bookingCode: "VB3393",
-  departureDate: "2026-10-24",
-  passportLastFour: "8436",
-} as const satisfies CheckInData;
-
-export const FLIGHT = {
-  originCode: "LED",
-  destinationCode: "SVO",
-  originCity: "Санкт-Петербург",
-  destinationCity: "Москва",
-  departureTime: "10:40",
-  arrivalTime: "12:10",
-  duration: "1 ч 39 мин",
-  gate: "34**",
-  seat: "74A",
-  terminal: "B",
-  boardingTime: "10:10",
-  airline: "AVA security check",
-  motto: "AVA MARIA, AVA VICTORIA",
-  displayDestination: "в счастье епт",
-} as const;
-
-export const GLOBE_ROUTE = {
-  originCode: "LED",
-  originCity: "Санкт-Петербург",
-  destinationCode: "HND",
-  destinationCity: "Токио · Ханэда",
-  originLongitude: 30.262,
-  originLatitude: 59.8,
-  destinationLongitude: 139.78,
-  destinationLatitude: 35.55,
-} as const;
-
-export const INITIAL_CHECK_IN_DATA: CheckInData = {
-  lastName: "",
-  firstName: "",
-  middleName: "",
-  birthDate: "",
-  flightNumber: "",
-  bookingCode: "",
-  departureDate: "",
-  passportLastFour: "",
-};
-
-export const STEP_FIELDS = {
-  passenger: ["lastName", "firstName", "middleName", "birthDate"],
-  flight: ["flightNumber", "bookingCode", "departureDate"],
-  document: ["passportLastFour"],
-} as const satisfies Record<CheckInStep, readonly (keyof CheckInData)[]>;
-
-export type CheckInErrors = Partial<Record<keyof CheckInData, string>>;
-
-const REQUIRED_ERRORS: Record<keyof CheckInData, string> = {
-  lastName: "Введите фамилию",
-  firstName: "Введите имя",
-  middleName: "Введите отчество",
-  birthDate: "Укажите дату рождения",
-  flightNumber: "Введите номер рейса",
-  bookingCode: "Введите код брони",
-  departureDate: "Укажите дату вылета",
-  passportLastFour: "Введите последние 4 цифры паспорта",
-};
-
-const MISMATCH_ERROR = "Данные не совпадают с квитанцией";
+export type { CheckInData, CheckInErrors, CheckInStep } from "./types";
 
 function normalizeName(value: string): string {
   return value
@@ -148,7 +73,13 @@ function validateField(
     return "Введите ровно 4 цифры";
   }
 
-  if (normalized !== normalizeField(field, EXPECTED_BOOKING[field]))
+  const matchesFirstNameAlias =
+    field === "firstName" &&
+    normalized === normalizeName(EXPECTED_BOOKING.shortName);
+  if (
+    normalized !== normalizeField(field, EXPECTED_BOOKING[field]) &&
+    !matchesFirstNameAlias
+  )
     return MISMATCH_ERROR;
   return undefined;
 }

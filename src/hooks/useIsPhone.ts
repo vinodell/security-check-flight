@@ -1,6 +1,9 @@
 import { useSyncExternalStore } from "react";
-
-const TOUCH_QUERY = "(pointer: coarse) and (hover: none)";
+import {
+  PHONE_SCREEN_MAX_EDGE,
+  PHONE_USER_AGENT_PATTERN,
+  TOUCH_QUERY,
+} from "../consts";
 
 function isPhone() {
   const client = navigator as Navigator & {
@@ -8,16 +11,16 @@ function isPhone() {
   };
   if (
     client.userAgentData?.mobile ||
-    /iPhone|iPod|Android.*Mobile|Windows Phone|BlackBerry|BB10/i.test(
-      client.userAgent,
-    )
+    PHONE_USER_AGENT_PATTERN.test(client.userAgent)
   ) {
     return true;
   }
 
   // A phone requesting the desktop site still has its touch screen dimensions.
   const shortEdge = Math.min(window.screen.width, window.screen.height);
-  return window.matchMedia(TOUCH_QUERY).matches && shortEdge <= 640;
+  return (
+    window.matchMedia(TOUCH_QUERY).matches && shortEdge <= PHONE_SCREEN_MAX_EDGE
+  );
 }
 
 function subscribe(onChange: () => void) {

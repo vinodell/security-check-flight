@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { ArrowUpRight, Download, Ticket, X } from "lucide-react";
+import { ASSETS, DOWNLOAD_JOKE_TEXT } from "../consts";
 import "./SecurityCheckDialog.css";
 import "./DownloadJokeDialog.css";
 
@@ -91,7 +92,7 @@ export default function DownloadJokeDialog({
           <figure className="download-joke-photo">
             <motion.img
               className="download-joke-image"
-              src={`${import.meta.env.BASE_URL}why.webp`}
+              src={`${import.meta.env.BASE_URL}${ASSETS.downloadJoke}`}
               width="768"
               height="500"
               alt="Зачем скачивать билет?"
@@ -151,7 +152,7 @@ export default function DownloadJokeDialog({
                 ease: [0.22, 1, 0.36, 1],
               }}
             >
-              А нахуя ты скачиваешь, если он перед тобой лежит?
+              {DOWNLOAD_JOKE_TEXT}
             </motion.h2>
             <motion.p
               id="download-joke-description"

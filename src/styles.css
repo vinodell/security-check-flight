@@ -199,6 +199,9 @@ h2 { margin: 0; font-size: clamp(1.25rem, min(2.35vw, 3.4dvh), 2rem); font-weigh
 .receipt-paper-header > span:last-child { text-align: right; color: var(--muted); font-size: .45rem; line-height: 1.7; letter-spacing: .08em; }
 .receipt-route { display: flex; align-items: center; gap: 1.3rem; margin: clamp(.6rem, 2.2dvh, 1.3rem) 0; }
 .receipt-route strong { font-size: clamp(1.3rem, 3.5dvh, 1.9rem); font-weight: 500; letter-spacing: -.04em; }
+.receipt-airport { display: grid; gap: .15rem; min-width: 0; }
+.receipt-airport:last-child { text-align: right; }
+.receipt-airport small { color: var(--muted); font-size: var(--small-size); line-height: 1.1; white-space: nowrap; }
 .receipt-route-line { flex: 1; display: grid; place-items: center; color: var(--blue); position: relative; }
 .receipt-route-line::before { content: ''; position: absolute; left: 0; right: 0; border-top: 1px dashed #d3ddd0; }
 .receipt-route-line svg { z-index: 1; background: white; padding: 0 .2rem; box-sizing: content-box; }
@@ -369,6 +372,7 @@ h2 { margin: 0; font-size: clamp(1.25rem, min(2.35vw, 3.4dvh), 2rem); font-weigh
   .boarding-main { padding: .35rem .7rem; gap: .2rem; }
   .boarding-route strong { font-size: 1.5rem; }
   .boarding-route span { font-size: .4rem; }
+  .receipt-route { margin: clamp(.4rem, 1dvh, .6rem) 0; }
   .boarding-name { font-size: .6rem; }
   .boarding-details dt { font-size: .4rem; }
   .boarding-details dd { font-size: .6rem; }

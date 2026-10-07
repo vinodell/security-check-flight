@@ -1,14 +1,14 @@
 import { mkdir, readFile } from 'node:fs/promises'
 import { expect, test, type Locator, type Page } from '@playwright/test'
-import { EXPECTED_BOOKING, FLIGHT } from '../src/domain/checkIn'
+import { EXPECTED_BOOKING, FLIGHT } from '../src/consts'
 import { formatDate } from '../src/domain/formatDate'
 
 const passengerName = `${EXPECTED_BOOKING.lastName} ${EXPECTED_BOOKING.firstName} ${EXPECTED_BOOKING.middleName}`
 const downloadJokeText = 'А нахуя ты скачиваешь, если он перед тобой лежит?'
 
-async function fillPassenger(page: Page) {
+async function fillPassenger(page: Page, firstName: string = EXPECTED_BOOKING.firstName) {
   await page.getByLabel('Фамилия', { exact: true }).fill(EXPECTED_BOOKING.lastName)
-  await page.getByLabel('Имя', { exact: true }).fill(EXPECTED_BOOKING.firstName)
+  await page.getByLabel('Имя', { exact: true }).fill(firstName)
   await page.getByLabel('Отчество', { exact: true }).fill(EXPECTED_BOOKING.middleName)
   await page.getByLabel('Дата рождения', { exact: true }).fill(EXPECTED_BOOKING.birthDate)
 }
@@ -19,8 +19,8 @@ async function fillFlight(page: Page) {
   await page.getByLabel('Дата вылета', { exact: true }).fill(EXPECTED_BOOKING.departureDate)
 }
 
-async function proceedToDocument(page: Page) {
-  await fillPassenger(page)
+async function proceedToDocument(page: Page, firstName: string = EXPECTED_BOOKING.firstName) {
+  await fillPassenger(page, firstName)
   await page.getByRole('button', { name: 'Продолжить', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Найдём ваш рейс.' })).toBeVisible()
   await fillFlight(page)
@@ -203,6 +203,48 @@ test('квитанция, ошибки, единственная бронь, с�
     await expect(page.getByLabel(label, { exact: true })).toHaveAttribute('aria-invalid', 'false')
   }
   await expect(page.getByRole('button', { name: /Рейс$/ })).toBeDisabled()
+})
+
+test('короткое имя проходит проверку той же брони; квитанция, талон и SVG ведут в Ханэду', async ({ page }, testInfo) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Как играть' }).click()
+  const receipt = page.locator('.receipt-dialog')
+  await expect(receipt).toBeVisible()
+  await expect(receipt.getByText(passengerName, { exact: true })).toBeVisible()
+  await expect(receipt.locator('.receipt-route')).toContainText(FLIGHT.destinationCode)
+  await expect(receipt).toContainText(FLIGHT.destinationCity)
+  await expect(receipt).not.toContainText(/SVO|Москва/)
+  await page.keyboard.press('Escape')
+  await expect(receipt).not.toBeVisible()
+
+  const alias = `  ${EXPECTED_BOOKING.shortName.toLocaleLowerCase('ru-RU')}  `
+  await proceedToDocument(page, alias)
+  await page.getByLabel('Последние 4 цифры паспорта', { exact: true }).fill(EXPECTED_BOOKING.passportLastFour)
+  await page.getByRole('button', { name: 'Получить посадочный талон' }).click()
+  const securityDialog = await expectSecurityGate(page)
+  await securityDialog.getByRole('button', { name: 'Продолжить', exact: true }).click()
+  await expect(securityDialog).not.toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Вы на борту.' })).toBeVisible()
+  const boardingPass = page.locator('.boarding-pass')
+  await expect(boardingPass.locator('.boarding-name')).toHaveText(passengerName)
+  await expect(boardingPass.locator('.boarding-route')).toContainText(FLIGHT.destinationCode)
+  await expect(boardingPass.locator('.boarding-route')).toContainText(FLIGHT.destinationCity)
+  await expect(page.locator('body')).not.toContainText(/SVO|Москва/)
+
+  await page.getByRole('button', { name: 'Скачать посадочный талон', exact: true }).click()
+  const downloadJoke = await expectDownloadJoke(page)
+  const downloadPromise = page.waitForEvent('download')
+  await downloadJoke.getByRole('button', { name: 'Всё равно скачать', exact: true }).click()
+  const download = await downloadPromise
+  const downloadedPath = testInfo.outputPath(download.suggestedFilename())
+  await download.saveAs(downloadedPath)
+  const svg = await readFile(downloadedPath, 'utf8')
+  expect(svg).toContain(passengerName)
+  expect(svg).toContain(`${FLIGHT.originCode} → ${FLIGHT.destinationCode}`)
+  expect(svg).toContain(FLIGHT.destinationCity)
+  expect(svg).not.toMatch(/SVO|Москва/)
+  await expectNoPageOverflow(page)
 })
 
 test('скачивание сначала показывает шутку; закрытие не скачивает билет и возвращает фокус', async ({ page }) => {

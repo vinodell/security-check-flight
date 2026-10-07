@@ -1,6 +1,6 @@
 import { AlertCircle } from "lucide-react";
 import type { InputHTMLAttributes } from "react";
-import type { CheckInData } from "../domain/checkIn";
+import type { CheckInData } from "../domain/types";
 
 type FormFieldProps = {
   name: keyof CheckInData;
