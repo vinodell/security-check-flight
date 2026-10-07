@@ -1,28 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
 import { Check, Download, Plane, RotateCcw, ShieldCheck } from "lucide-react";
-import { BAR_WIDTHS, EXPECTED_BOOKING, FLIGHT } from "../consts";
+import { ASSETS, BAR_WIDTHS, EXPECTED_BOOKING, FLIGHT } from "../consts";
 import { formatDate } from "../domain/formatDate";
 import DownloadJokeDialog from "./DownloadJokeDialog";
 
 function downloadPass() {
-  let x = 36;
-  const bars = BAR_WIDTHS.map((width) => {
-    const rect = `<rect x="${x}" y="330" width="${width * 2}" height="42"/>`;
-    x += width * 2 + 3;
-    return rect;
-  }).join("");
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="440" viewBox="0 0 640 440"><rect width="640" height="440" rx="24" fill="#f6f8f3"/><rect width="640" height="88" rx="24" fill="#244de8"/><path d="M0 64h640v24H0z" fill="#244de8"/><g font-family="Arial,sans-serif"><text x="36" y="50" font-size="36" font-weight="700" fill="white">${FLIGHT.airline}</text><text x="36" y="70" font-size="10" letter-spacing="1" fill="white">${FLIGHT.motto}</text><text x="390" y="52" font-size="14" fill="white">ПОСАДОЧНЫЙ ТАЛОН</text><g fill="#18302f"><text x="36" y="156" font-size="44" font-weight="700">${FLIGHT.originCode} → ${FLIGHT.destinationCode}</text><text x="36" y="174" font-size="10">${FLIGHT.originCity} → ${FLIGHT.destinationCity}</text><text x="36" y="192" font-size="19">${EXPECTED_BOOKING.lastName} ${EXPECTED_BOOKING.firstName} ${EXPECTED_BOOKING.middleName}</text><text x="36" y="240" font-size="15">РЕЙС ${EXPECTED_BOOKING.flightNumber} · ${formatDate(EXPECTED_BOOKING.departureDate)}</text><text x="36" y="285" font-size="19">ВЫХОД ${FLIGHT.gate}    МЕСТО ${FLIGHT.seat}    ПОСАДКА ${FLIGHT.boardingTime}</text>${bars}<text x="36" y="405" font-size="12">Игровой посадочный талон · Бронь ${EXPECTED_BOOKING.bookingCode}</text></g></g></svg>`;
-  const url = URL.createObjectURL(
-    new Blob([svg], { type: "image/svg+xml;charset=utf-8" }),
-  );
   const link = document.createElement("a");
-  link.href = url;
-  link.download = `${FLIGHT.airline}-${EXPECTED_BOOKING.bookingCode}.svg`;
+  link.href = `${import.meta.env.BASE_URL}${ASSETS.ticketDownload}`;
+  link.download = ASSETS.ticketDownload;
   document.body.append(link);
   link.click();
   link.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export default function BoardingPass({
@@ -156,7 +145,7 @@ export default function BoardingPass({
       </motion.button>
       {downloaded && (
         <p className="download-status" role="status">
-          Талон сохранён в формате SVG
+          Талон сохранён в формате JPG
         </p>
       )}
       <div className="success-actions">

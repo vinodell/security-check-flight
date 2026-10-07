@@ -187,14 +187,15 @@ test('квитанция, ошибки, единственная бронь, с�
   await downloadJoke.getByRole('button', { name: 'Всё равно скачать', exact: true }).click()
   const download = await downloadPromise
   await expect(downloadJoke).not.toBeVisible()
-  expect(download.suggestedFilename()).toBe(`${FLIGHT.airline}-${EXPECTED_BOOKING.bookingCode}.svg`)
+  expect(download.suggestedFilename()).toBe('ticket_clue.jpg')
   const downloadedPath = testInfo.outputPath(download.suggestedFilename())
   await download.saveAs(downloadedPath)
-  const svg = await readFile(downloadedPath, 'utf8')
-  expect(svg).toContain('xmlns="http://www.w3.org/2000/svg"')
-  expect(svg).toContain(passengerName)
-  expect(svg).toContain(`Бронь ${EXPECTED_BOOKING.bookingCode}`)
-  await expect(page.getByRole('status')).toHaveText('Талон сохранён в формате SVG')
+  const [downloadedTicket, ticketClue] = await Promise.all([
+    readFile(downloadedPath),
+    readFile('public/ticket_clue.jpg'),
+  ])
+  expect(downloadedTicket).toEqual(ticketClue)
+  await expect(page.getByRole('status')).toHaveText('Талон сохранён в формате JPG')
 
   await page.getByRole('button', { name: 'Пройти ещё раз' }).click()
   await expect(page.getByRole('heading', { name: 'Давайте знакомиться.' })).toBeVisible()
@@ -205,7 +206,7 @@ test('квитанция, ошибки, единственная бронь, с�
   await expect(page.getByRole('button', { name: /Рейс$/ })).toBeDisabled()
 })
 
-test('короткое имя проходит проверку той же брони; квитанция, талон и SVG ведут в Ханэду', async ({ page }, testInfo) => {
+test('короткое имя проходит проверку той же брони; квитанция и талон ведут в Ханэду, скачивается JPEG', async ({ page }, testInfo) => {
   await page.emulateMedia({ reducedMotion: 'reduce' })
   await page.goto('/')
   await page.getByRole('button', { name: 'Как играть' }).click()
@@ -237,13 +238,15 @@ test('короткое имя проходит проверку той же бр
   const downloadPromise = page.waitForEvent('download')
   await downloadJoke.getByRole('button', { name: 'Всё равно скачать', exact: true }).click()
   const download = await downloadPromise
+  expect(download.suggestedFilename()).toBe('ticket_clue.jpg')
   const downloadedPath = testInfo.outputPath(download.suggestedFilename())
   await download.saveAs(downloadedPath)
-  const svg = await readFile(downloadedPath, 'utf8')
-  expect(svg).toContain(passengerName)
-  expect(svg).toContain(`${FLIGHT.originCode} → ${FLIGHT.destinationCode}`)
-  expect(svg).toContain(FLIGHT.destinationCity)
-  expect(svg).not.toMatch(/SVO|Москва/)
+  const [downloadedTicket, ticketClue] = await Promise.all([
+    readFile(downloadedPath),
+    readFile('public/ticket_clue.jpg'),
+  ])
+  expect(downloadedTicket).toEqual(ticketClue)
+  await expect(page.getByRole('status')).toHaveText('Талон сохранён в формате JPG')
   await expectNoPageOverflow(page)
 })
 
@@ -293,7 +296,7 @@ test('скачивание сначала показывает шутку; за�
   await joke.getByRole('button', { name: 'Всё равно скачать', exact: true }).click()
   await downloadPromise
   await expect(joke).not.toBeVisible()
-  await expect(page.getByRole('status')).toHaveText('Талон сохранён в формате SVG')
+  await expect(page.getByRole('status')).toHaveText('Талон сохранён в формате JPG')
   const repeatDownload = page.getByRole('button', { name: 'Скачать ещё раз', exact: true })
   await expect(repeatDownload).toBeFocused()
   await repeatDownload.click()

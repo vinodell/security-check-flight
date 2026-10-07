@@ -113,6 +113,7 @@ export const ASSETS = {
   prayingFigure: "pray_man.jpg",
   securityPortrait: "security.jpg",
   ticket: "ticket.jpg",
+  ticketDownload: "ticket_clue.jpg",
   downloadJoke: "why.webp",
 } as const;
 
