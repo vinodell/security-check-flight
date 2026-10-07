@@ -1,0 +1,199 @@
+.desktop-required-dialog {
+  width: min(36rem, 94vw);
+  height: min(40rem, 90dvh);
+}
+.desktop-required-content {
+  gap: clamp(0.65rem, 1.8dvh, 1.1rem);
+}
+.desktop-required-header {
+  align-items: center;
+  gap: 0.7rem;
+}
+.desktop-required-header h2 {
+  max-width: 16ch;
+  font-size: clamp(1.25rem, min(5.8vw, 4.4dvh), 2rem);
+  line-height: 1.12;
+  outline: none;
+}
+.desktop-required-device {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: clamp(2.15rem, 7vw, 3rem);
+  aspect-ratio: 1;
+  border: 1px solid #b3c9d833;
+  border-radius: 50%;
+  color: #ccd5c1;
+  background: #dce9f20d;
+}
+.desktop-required-device svg {
+  width: 50%;
+  height: 50%;
+}
+.desktop-required-stage {
+  min-height: 0;
+}
+.desktop-required-stage .security-stage-topline {
+  top: 5%;
+  font-size: clamp(0.4rem, 1dvh, 0.6rem);
+}
+.desktop-required-stage .desktop-required-status {
+  color: #edcd85;
+}
+.desktop-required-stage .security-sirens {
+  top: 19%;
+  width: 83%;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.desktop-required-stage .security-sirens-label {
+  margin-top: 0;
+  font-size: clamp(0.45rem, 1.2dvh, 0.65rem);
+}
+.desktop-required-stage .security-siren {
+  width: clamp(2rem, min(8vw, 7dvh), 3.2rem);
+}
+.desktop-required-photo {
+  position: absolute;
+  z-index: 4;
+  top: 56%;
+  left: 50%;
+  translate: -50% -50%;
+  display: flex;
+  justify-content: center;
+  width: 76%;
+  height: 54%;
+  margin: 0;
+  filter: drop-shadow(0 0.7rem 1.1rem #01091280);
+}
+.desktop-required-photo img {
+  display: block;
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  min-width: 0;
+  object-fit: contain;
+  border: 0.3rem solid #edcd85;
+  border-radius: 0.45rem;
+  background: #f3c346;
+}
+.desktop-required-stage-caption {
+  position: absolute;
+  z-index: 7;
+  bottom: 5%;
+  left: 50%;
+  translate: -50% 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: max-content;
+  max-width: 95%;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #a8bdce2b;
+  border-radius: 0.25rem;
+  background: #081c2ce8;
+  color: #d5c399;
+  font-size: clamp(0.42rem, 1.1dvh, 0.64rem);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+.desktop-required-stage-caption > span {
+  width: 0.4rem;
+  aspect-ratio: 1;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: #edcd85;
+}
+.desktop-required-footer {
+  display: grid;
+  gap: clamp(0.5rem, 1.4dvh, 0.8rem);
+  flex-shrink: 0;
+  text-align: center;
+}
+.desktop-required-footer p {
+  margin: 0;
+  font-size: clamp(0.7rem, min(3.2vw, 1.8dvh), 0.85rem);
+  line-height: 1.45;
+  color: #b6c8d7;
+}
+.desktop-required-footer strong {
+  color: #f5f1e8;
+  font-weight: 600;
+}
+.desktop-required-copy {
+  width: 100%;
+  min-height: 2.75rem;
+  gap: 0.7rem;
+  font-size: clamp(0.7rem, 1.8dvh, 0.85rem);
+}
+.desktop-required-footer .desktop-required-copy-feedback {
+  min-height: 2.5em;
+  color: #8ba3b7;
+  font-size: clamp(0.6rem, min(2.5vw, 1.4dvh), 0.7rem);
+  letter-spacing: 0.02em;
+}
+@media (max-height: 30rem) and (min-width: 38.01rem) {
+  .desktop-required-dialog {
+    width: min(47rem, 94vw);
+  }
+  .desktop-required-content {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    grid-template-rows: auto minmax(0, 1fr);
+    column-gap: 1.1rem;
+    row-gap: 0.8rem;
+    padding: clamp(0.75rem, 2.5dvh, 1rem);
+  }
+  .desktop-required-header {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 0;
+  }
+  .desktop-required-header h2 {
+    font-size: clamp(1.1rem, 4.7dvh, 1.5rem);
+    max-width: 17ch;
+  }
+  .desktop-required-header .security-eyebrow {
+    font-size: clamp(0.48rem, 1.6dvh, 0.6rem);
+    letter-spacing: 0.1em;
+  }
+  .desktop-required-device {
+    display: none;
+  }
+  .desktop-required-stage {
+    grid-column: 1;
+    grid-row: 1 / 3;
+  }
+  .desktop-required-stage .security-sirens {
+    top: 20%;
+  }
+  .desktop-required-photo {
+    top: 57%;
+    height: 49%;
+  }
+  .desktop-required-footer {
+    grid-column: 2;
+    grid-row: 2;
+    align-content: center;
+    gap: clamp(0.5rem, 2.5dvh, 0.8rem);
+    text-align: left;
+  }
+  .desktop-required-footer p {
+    font-size: clamp(0.7rem, 3dvh, 0.85rem);
+  }
+  .desktop-required-copy {
+    min-height: 2.75rem;
+    padding: 0.65rem 0.8rem;
+    font-size: 0.75rem;
+  }
+  .desktop-required-footer .desktop-required-copy-feedback {
+    font-size: clamp(0.6rem, 2.3dvh, 0.7rem);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .desktop-required-stage .security-sirens {
+    opacity: 1 !important;
+  }
+}

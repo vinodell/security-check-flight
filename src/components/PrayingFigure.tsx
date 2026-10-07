@@ -8,5 +8,5 @@ export default function PrayingFigure() {
       height={362}
       decoding="async"
     />
-  )
+  );
 }

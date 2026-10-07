@@ -1,21 +1,32 @@
-import { AlertCircle } from 'lucide-react'
-import type { InputHTMLAttributes } from 'react'
-import type { CheckInData } from '../domain/checkIn'
+import { AlertCircle } from "lucide-react";
+import type { InputHTMLAttributes } from "react";
+import type { CheckInData } from "../domain/checkIn";
 
 type FormFieldProps = {
-  name: keyof CheckInData
-  label: string
-  value: string
-  onChange: (name: keyof CheckInData, value: string) => void
-  error?: string
-  hint?: string
-} & Pick<InputHTMLAttributes<HTMLInputElement>, 'type' | 'placeholder' | 'autoComplete' | 'inputMode' | 'maxLength'>
+  name: keyof CheckInData;
+  label: string;
+  value: string;
+  onChange: (name: keyof CheckInData, value: string) => void;
+  error?: string;
+  hint?: string;
+} & Pick<
+  InputHTMLAttributes<HTMLInputElement>,
+  "type" | "placeholder" | "autoComplete" | "inputMode" | "maxLength"
+>;
 
-export default function FormField({ name, label, value, onChange, error, hint, ...inputProps }: FormFieldProps) {
-  const descriptionId = error || hint ? `${name}-description` : undefined
+export default function FormField({
+  name,
+  label,
+  value,
+  onChange,
+  error,
+  hint,
+  ...inputProps
+}: FormFieldProps) {
+  const descriptionId = error || hint ? `${name}-description` : undefined;
 
   return (
-    <div className={`form-field ${error ? 'form-field--invalid' : ''}`}>
+    <div className={`form-field ${error ? "form-field--invalid" : ""}`}>
       <label htmlFor={name}>{label}</label>
       <input
         {...inputProps}
@@ -28,8 +39,15 @@ export default function FormField({ name, label, value, onChange, error, hint, .
         required
       />
       {error ? (
-        <p className="field-error" id={descriptionId}><AlertCircle size={13} aria-hidden="true" />{error}</p>
-      ) : hint ? <p className="field-hint" id={descriptionId}>{hint}</p> : null}
+        <p className="field-error" id={descriptionId}>
+          <AlertCircle size={13} aria-hidden="true" />
+          {error}
+        </p>
+      ) : hint ? (
+        <p className="field-hint" id={descriptionId}>
+          {hint}
+        </p>
+      ) : null}
     </div>
-  )
+  );
 }

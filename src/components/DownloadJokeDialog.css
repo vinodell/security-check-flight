@@ -1,0 +1,223 @@
+.download-joke-dialog {
+  width: min(52rem, 94vw);
+  height: min(37rem, 90dvh);
+}
+.download-joke-content {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100%;
+  min-height: 0;
+  padding: clamp(0.8rem, 2.5dvh, 1.4rem);
+  gap: clamp(0.8rem, 2.5dvh, 1.3rem);
+}
+.download-joke-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-width: 0;
+  gap: 0.5rem;
+}
+.download-joke-header .security-eyebrow {
+  font-size: clamp(0.5rem, min(1.1vw, 1.5dvh), 0.65rem);
+  letter-spacing: 0.14em;
+}
+.download-joke-stage {
+  display: grid;
+  grid-template-columns: 1.03fr 1fr;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid #c7d7e32e;
+  border-radius: 0.7rem;
+  background: var(--security-cream);
+}
+.download-joke-photo {
+  position: relative;
+  isolation: isolate;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  background: #6d774a;
+}
+.download-joke-photo::after {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  content: "";
+  background: linear-gradient(0deg, #07192c75, transparent 35%);
+  pointer-events: none;
+}
+.download-joke-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 44% center;
+  transform-origin: 43% 42%;
+}
+.download-joke-photo-label {
+  position: absolute;
+  left: 6%;
+  bottom: 5%;
+  z-index: 2;
+  color: #fff5df;
+  font-size: clamp(0.4rem, min(0.8vw, 1.1dvh), 0.55rem);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+.download-joke-question {
+  position: absolute;
+  z-index: 2;
+  top: 5%;
+  right: 6%;
+  display: grid;
+  place-items: center;
+  width: clamp(2.4rem, min(6vw, 9dvh), 4rem);
+  aspect-ratio: 1;
+  border: 1px solid #f5f1e866;
+  border-radius: 50%;
+  background: #07192ce6;
+  box-shadow: 0 0.4rem 1.5rem #07192c3b;
+  color: #cce692;
+  font-size: clamp(1.5rem, min(4vw, 6dvh), 2.7rem);
+  font-weight: 650;
+  line-height: 1;
+}
+.download-joke-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  gap: clamp(0.7rem, 2.4dvh, 1.4rem);
+  padding: clamp(1rem, min(3vw, 4dvh), 2rem);
+  color: #07192c;
+}
+.download-joke-status {
+  width: fit-content;
+  padding-bottom: 0.6em;
+  border-bottom: 1px solid #07192c30;
+  color: #6d756b;
+  font-size: clamp(0.45rem, min(0.9vw, 1.35dvh), 0.6rem);
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.12em;
+}
+.download-joke-copy h2 {
+  margin: 0;
+  font-size: clamp(1.4rem, min(3.1vw, 5dvh), 2.5rem);
+  font-weight: 600;
+  line-height: 1.08;
+  letter-spacing: -0.05em;
+}
+.download-joke-copy p {
+  max-width: 28ch;
+  margin: 0;
+  color: #667064;
+  font-size: clamp(0.65rem, min(1.1vw, 1.75dvh), 0.85rem);
+  line-height: 1.5;
+}
+.download-joke-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+}
+.download-joke-download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  min-height: 2.6rem;
+  padding: 0.65rem 0.4rem;
+  border-radius: 0.35rem;
+  background: transparent;
+  color: #b6c9d8;
+  font-size: clamp(0.65rem, min(1.2vw, 1.7dvh), 0.8rem);
+  font-weight: 500;
+  white-space: nowrap;
+}
+.download-joke-download svg {
+  width: 1.2em;
+  height: 1.2em;
+}
+.download-joke-download:hover {
+  color: var(--security-cream);
+}
+.download-joke-understood {
+  gap: clamp(0.6rem, 1.7vw, 1rem);
+}
+@media (max-width: 38rem) {
+  .download-joke-dialog {
+    height: min(38rem, 90dvh);
+  }
+  .download-joke-content {
+    gap: clamp(0.65rem, 2dvh, 1rem);
+  }
+  .download-joke-stage {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+  .download-joke-copy {
+    padding: clamp(0.85rem, 2.5dvh, 1.1rem);
+    gap: clamp(0.5rem, 1.5dvh, 0.8rem);
+  }
+  .download-joke-copy h2 {
+    font-size: clamp(1.25rem, min(5.9vw, 3.8dvh), 1.65rem);
+    line-height: 1.09;
+    max-width: 24ch;
+  }
+  .download-joke-copy p {
+    max-width: 40ch;
+    font-size: clamp(0.6rem, 1.65dvh, 0.75rem);
+  }
+  .download-joke-status {
+    font-size: clamp(0.43rem, 1.1dvh, 0.55rem);
+  }
+  .download-joke-header .security-eyebrow {
+    font-size: clamp(0.44rem, 2vw, 0.6rem);
+    letter-spacing: 0.09em;
+  }
+  .download-joke-download,
+  .download-joke-understood {
+    font-size: clamp(0.6rem, 2.8vw, 0.75rem);
+    gap: 0.4rem;
+  }
+  .download-joke-download {
+    padding-inline: 0;
+  }
+  .download-joke-photo-label {
+    font-size: 0.48rem;
+  }
+}
+@media (max-height: 30rem) and (min-width: 38.01rem) {
+  .download-joke-dialog {
+    height: 90dvh;
+  }
+  .download-joke-content {
+    padding: 0.7rem;
+    gap: 0.6rem;
+  }
+  .download-joke-stage {
+    grid-template-columns: 1fr 1.1fr;
+  }
+  .download-joke-copy {
+    padding: clamp(0.7rem, 3.5dvh, 1.2rem);
+    gap: 0.7rem;
+  }
+  .download-joke-copy h2 {
+    font-size: clamp(1.25rem, 5.5dvh, 1.75rem);
+  }
+  .download-joke-copy p {
+    max-width: 40ch;
+    font-size: clamp(0.6rem, 2.8dvh, 0.75rem);
+  }
+  .download-joke-status {
+    font-size: 0.48rem;
+  }
+  .download-joke-download,
+  .download-joke-understood {
+    min-height: 2rem;
+    padding-block: 0.45rem;
+  }
+}
