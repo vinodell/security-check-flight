@@ -13,11 +13,11 @@ function downloadPass() {
     x += width * 2 + 3
     return rect
   }).join('')
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="440" viewBox="0 0 640 440"><rect width="640" height="440" rx="24" fill="#f6f8f3"/><rect width="640" height="88" rx="24" fill="#244de8"/><path d="M0 64h640v24H0z" fill="#244de8"/><g font-family="Arial,sans-serif"><text x="36" y="56" font-size="36" font-weight="700" fill="white">aero®</text><text x="390" y="52" font-size="14" fill="white">ПОСАДОЧНЫЙ ТАЛОН</text><g fill="#18302f"><text x="36" y="156" font-size="44" font-weight="700">${FLIGHT.originCode} → ${FLIGHT.destinationCode}</text><text x="36" y="192" font-size="19">${EXPECTED_BOOKING.lastName} ${EXPECTED_BOOKING.firstName} ${EXPECTED_BOOKING.middleName}</text><text x="36" y="240" font-size="15">РЕЙС ${EXPECTED_BOOKING.flightNumber} · ${formatDate(EXPECTED_BOOKING.departureDate)}</text><text x="36" y="285" font-size="19">ВЫХОД ${FLIGHT.gate}    МЕСТО ${FLIGHT.seat}    ПОСАДКА ${FLIGHT.boardingTime}</text>${bars}<text x="36" y="405" font-size="12">Игровой посадочный талон · Бронь ${EXPECTED_BOOKING.bookingCode}</text></g></g></svg>`
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="440" viewBox="0 0 640 440"><rect width="640" height="440" rx="24" fill="#f6f8f3"/><rect width="640" height="88" rx="24" fill="#244de8"/><path d="M0 64h640v24H0z" fill="#244de8"/><g font-family="Arial,sans-serif"><text x="36" y="50" font-size="36" font-weight="700" fill="white">${FLIGHT.airline}</text><text x="36" y="70" font-size="10" letter-spacing="1" fill="white">${FLIGHT.motto}</text><text x="390" y="52" font-size="14" fill="white">ПОСАДОЧНЫЙ ТАЛОН</text><g fill="#18302f"><text x="36" y="156" font-size="44" font-weight="700">${FLIGHT.originCode} → ${FLIGHT.destinationCode}</text><text x="36" y="192" font-size="19">${EXPECTED_BOOKING.lastName} ${EXPECTED_BOOKING.firstName} ${EXPECTED_BOOKING.middleName}</text><text x="36" y="240" font-size="15">РЕЙС ${EXPECTED_BOOKING.flightNumber} · ${formatDate(EXPECTED_BOOKING.departureDate)}</text><text x="36" y="285" font-size="19">ВЫХОД ${FLIGHT.gate}    МЕСТО ${FLIGHT.seat}    ПОСАДКА ${FLIGHT.boardingTime}</text>${bars}<text x="36" y="405" font-size="12">Игровой посадочный талон · Бронь ${EXPECTED_BOOKING.bookingCode}</text></g></g></svg>`
   const url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml;charset=utf-8' }))
   const link = document.createElement('a')
   link.href = url
-  link.download = `Aero-${EXPECTED_BOOKING.bookingCode}.svg`
+  link.download = `${FLIGHT.airline}-${EXPECTED_BOOKING.bookingCode}.svg`
   document.body.append(link)
   link.click()
   link.remove()
@@ -50,7 +50,7 @@ export default function BoardingPass({ onRestart }: { onRestart: () => void }) {
         passRef.current?.style.setProperty('--tilt-y', '0deg')
       }}>
         <div className="boarding-pass" ref={passRef}>
-          <div className="boarding-header"><span>aero<span>®</span></span><span>BOARDING PASS <Plane size={15} /></span></div>
+          <div className="boarding-header"><span className="boarding-brand">{FLIGHT.airline}<small className="brand-motto">{FLIGHT.motto}</small></span><span>BOARDING PASS <Plane size={15} /></span></div>
           <div className="boarding-main">
             <div className="boarding-route"><div><strong>{FLIGHT.originCode}</strong><span>{FLIGHT.originCity}</span></div><Plane size={24} /><div><strong>{FLIGHT.destinationCode}</strong><span>{FLIGHT.destinationCity}</span></div></div>
             <p className="boarding-name">{EXPECTED_BOOKING.lastName} {EXPECTED_BOOKING.firstName} {EXPECTED_BOOKING.middleName}</p>

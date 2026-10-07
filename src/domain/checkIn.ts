@@ -13,12 +13,12 @@ export type CheckInStep = 'passenger' | 'flight' | 'document'
 
 /** The single booking accepted by this local mini-game. */
 export const EXPECTED_BOOKING = {
-  lastName: 'Волкова',
-  firstName: 'Анна',
-  middleName: 'Сергеевна',
-  birthDate: '1998-04-12',
-  flightNumber: 'AE 204',
-  bookingCode: 'SKY204',
+  lastName: 'Васильев',
+  firstName: 'Александр',
+  middleName: 'Олегович',
+  birthDate: '1993-11-23',
+  flightNumber: 'AV 7439',
+  bookingCode: 'SKY666',
   departureDate: '2026-10-24',
   passportLastFour: '4821',
 } as const satisfies CheckInData
@@ -35,7 +35,8 @@ export const FLIGHT = {
   seat: '14A',
   terminal: 'B',
   boardingTime: '10:10',
-  airline: 'Aero',
+  airline: 'AVA',
+  motto: 'AVA MARIA, AVA VICTORIA',
 } as const
 
 export const INITIAL_CHECK_IN_DATA: CheckInData = {

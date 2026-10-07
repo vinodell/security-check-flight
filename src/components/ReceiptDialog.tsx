@@ -37,7 +37,7 @@ export default function ReceiptDialog({ onClose, onContinue }: { onClose: () => 
         <h2 id="receipt-title">Один билет.<br />Одно совпадение.</h2>
         <p className="dialog-description">Перед вами небольшая игра. Перенесите данные из квитанции в три блока регистрации и получите свой посадочный талон.</p>
         <div className="receipt-paper">
-          <div className="receipt-paper-header"><span className="receipt-brand">aero<span>®</span></span><span>МАРШРУТНАЯ<br />КВИТАНЦИЯ</span></div>
+          <div className="receipt-paper-header"><div className="receipt-brand-lockup"><span className="receipt-brand">{FLIGHT.airline}</span><small className="brand-motto">{FLIGHT.motto}</small></div><span>МАРШРУТНАЯ<br />КВИТАНЦИЯ</span></div>
           <div className="receipt-route"><strong>{FLIGHT.originCode}</strong><span className="receipt-route-line"><Plane size={19} /></span><strong>{FLIGHT.destinationCode}</strong></div>
           <dl className="receipt-data">
             <div className="receipt-data-full"><dt>Пассажир</dt><dd>{EXPECTED_BOOKING.lastName} {EXPECTED_BOOKING.firstName} {EXPECTED_BOOKING.middleName}</dd></div>

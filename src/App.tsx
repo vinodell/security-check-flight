@@ -7,6 +7,7 @@ import { formatShortDate } from './domain/formatDate'
 import FormField from './components/FormField'
 import ReceiptDialog from './components/ReceiptDialog'
 import BoardingPass from './components/BoardingPass'
+import PrayingFigure from './components/PrayingFigure'
 
 const GlobeScene = lazy(() => import('./components/GlobeScene'))
 
@@ -80,27 +81,27 @@ function App() {
     <MotionConfig reducedMotion="user" transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}>
       <div className="page-shell">
         <header className="site-header">
-          <a href="#" className="brand" aria-label="Aero — главная" onClick={(event) => { event.preventDefault(); window.scrollTo({ top: 0, behavior: reducedMotion ? 'instant' : 'smooth' }) }}>
-            <span className="brand-symbol"><Plane size={20} strokeWidth={2.5} /></span>aero<span className="brand-registered">®</span>
+          <a href="#" className="brand" aria-label={`${FLIGHT.airline} — главная`} onClick={(event) => event.preventDefault()}>
+            <span className="brand-symbol"><Plane size={20} strokeWidth={2.5} /></span>{FLIGHT.airline}
           </a>
           <nav aria-label="Основная навигация"><a className="nav-active" href="#check-in">Регистрация <span /></a><a href="#flight-details">О рейсе</a><button onClick={() => setReceiptOpen(true)}>Как играть <ArrowUpRight size={14} /></button></nav>
-          <span className="header-world"><Globe2 size={15} /> RU <span className="header-divider" /> ЛЕТИМ ВМЕСТЕ</span>
+          <span className="header-world"><Globe2 size={15} /> RU <span className="header-divider" /> {FLIGHT.motto}</span>
         </header>
 
         <main>
           <div className="page-topline"><span>ONLINE CHECK-IN</span><span><span className="status-dot" /> РЕГИСТРАЦИЯ ОТКРЫТА</span></div>
           <div className="main-grid">
             <section className="hero" aria-labelledby="hero-title">
-              <motion.div initial={reducedMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
+              <motion.div className="hero-copy" initial={reducedMotion ? false : { opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
                 <div className="hero-eyebrow"><span className="eyebrow-line" /> МЕНЬШЕ ОЖИДАНИЯ. БОЛЬШЕ НЕБА.</div>
                 <h1 id="hero-title">Ваш рейс<br />начинается<br /><span>здесь.</span><span className="heading-arrow"><ArrowUpRight strokeWidth={1.4} /></span></h1>
-                <p className="hero-description">Небольшое приключение перед большим.<br />Найдите свою бронь, пройдите регистрацию<br className="desktop-break" /> и получите место у окна.</p>
-                <button className="receipt-link" onClick={() => setReceiptOpen(true)}><span className="receipt-link-icon"><Ticket size={19} /></span><span>Ваша маршрутная квитанция<small>Все подсказки уже внутри</small></span><ArrowUpRight size={19} /></button>
-                <a className="mobile-start" href="#check-in">Начать регистрацию <ArrowDown size={16} /></a>
+                <p className="hero-description">Найдите свою бронь, пройдите регистрацию<br className="desktop-break" /> и получите место у окна.</p>
+                <button className="receipt-link" onClick={() => setReceiptOpen(true)}><span className="receipt-link-icon"><Ticket size={19} /></span><span>Маршрутная квитанция<small>Все подсказки уже внутри</small></span><ArrowUpRight size={19} /></button>
               </motion.div>
 
               <div className="globe-stage" role="group" aria-label={`Интерактивный глобус с маршрутом ${FLIGHT.originCity} — ${FLIGHT.destinationCity}`}>
                 <div className="globe-orbit orbit-one" /><div className="globe-orbit orbit-two" />
+                <PrayingFigure />
                 <div className="globe-caption"><span className="status-dot" /> МИР БЛИЖЕ, ЧЕМ КАЖЕТСЯ</div>
                 <div className="globe-canvas">{loadGlobe ? <Suspense fallback={<div className="globe-placeholder" aria-hidden="true" />}><GlobeScene reducedMotion={Boolean(reducedMotion)} /></Suspense> : <div className="globe-placeholder" aria-hidden="true" />}</div>
                 <div className="globe-origin"><span className="map-pin" /><strong>{FLIGHT.originCode}</strong><span>{FLIGHT.originCity}</span></div>
@@ -111,7 +112,7 @@ function App() {
             </section>
 
             <section className={`check-in-card ${registered ? 'check-in-card--success' : ''}`} id="check-in" aria-label="Регистрация на рейс">
-              <div className="card-topline"><span><span className="card-top-dot" /> AERO CHECK-IN</span><span>{registered ? 'ГОТОВО К ПОЛЁТУ' : 'ВАШЕ МЕСТО ЖДЁТ'}</span></div>
+              <div className="card-topline"><span><span className="card-top-dot" /> {FLIGHT.airline} CHECK-IN</span><span>{registered ? 'ГОТОВО К ПОЛЁТУ' : 'ВАШЕ МЕСТО ЖДЁТ'}</span></div>
               <AnimatePresence mode="wait" initial={false}>
                 {registered ? <BoardingPass key="boarding-pass" onRestart={restart} /> : (
                   <motion.div key="registration" className="registration-content" exit={{ opacity: 0, y: -8 }}>
@@ -135,7 +136,7 @@ function App() {
                           <div className="section-icon"><StepIcon size={23} strokeWidth={1.6} /><span>0{stepIndex + 1} / 03</span></div>
                           <h2 tabIndex={-1} className="step-heading">{step.title}</h2>
                           <p className="section-description">{step.description}</p>
-                          <div className="form-fields">
+                          <div className={`form-fields form-fields--${step.id}`}>
                             {step.id === 'passenger' && <>
                               <div className="field-row"><FormField name="lastName" label="Фамилия" placeholder={`Например, ${EXPECTED_BOOKING.lastName}`} autoComplete="family-name" value={data.lastName} onChange={changeField} error={errors.lastName} maxLength={60} /><FormField name="firstName" label="Имя" placeholder={`Например, ${EXPECTED_BOOKING.firstName}`} autoComplete="given-name" value={data.firstName} onChange={changeField} error={errors.firstName} maxLength={60} /></div>
                               <FormField name="middleName" label="Отчество" placeholder="Как в документе" autoComplete="additional-name" value={data.middleName} onChange={changeField} error={errors.middleName} maxLength={60} />
@@ -174,10 +175,10 @@ function App() {
           </section>
         </main>
 
-        <footer className="site-footer"><span>© 2026 AERO. С НЕБОМ НА ТЫ.</span><span className="footer-note">Маленькая игра для больших путешествий <ArrowUpRight size={13} /></span><a href="#check-in">К регистрации <ArrowDown size={13} /></a></footer>
+        <footer className="site-footer"><span>© 2026 {FLIGHT.airline}</span><span className="footer-motto">{FLIGHT.motto}</span><a href="#check-in">К регистрации <ArrowDown size={13} /></a></footer>
         {receiptOpen && <ReceiptDialog onClose={() => setReceiptOpen(false)} onContinue={() => {
           setReceiptOpen(false)
-          window.requestAnimationFrame(() => document.getElementById('check-in')?.scrollIntoView({ behavior: reducedMotion ? 'instant' : 'smooth', block: 'start' }))
+          window.requestAnimationFrame(() => document.getElementById(STEP_FIELDS[step.id][0])?.focus({ preventScroll: true }))
         }} />}
       </div>
     </MotionConfig>
