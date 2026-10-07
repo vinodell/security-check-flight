@@ -108,15 +108,15 @@ export default function ReceiptDialog({
             </div>
             <div>
               <dt>Последние 4 цифры паспорта</dt>
-              <dd>{EXPECTED_BOOKING.passportLastFour}</dd>
+              <dd>;.."!""(;74 · 39....(№;)""</dd>
             </div>
             <div>
               <dt>Номер рейса</dt>
-              <dd>{EXPECTED_BOOKING.flightNumber}</dd>
+              <dd>;.??!(;74 · 39(№ff___;)""</dd>
             </div>
             <div>
               <dt>Код брони</dt>
-              <dd>{EXPECTED_BOOKING.bookingCode}</dd>
+              <dd>;.)!__=(;74 · 39(№+++___;)""</dd>
             </div>
             <div>
               <dt>Дата вылета</dt>
@@ -125,7 +125,7 @@ export default function ReceiptDialog({
             <div>
               <dt>Вылет · прибытие</dt>
               <dd>
-                {FLIGHT.departureTime} · {FLIGHT.arrivalTime}
+                ;.(;74 · 39(№;)""
               </dd>
             </div>
           </dl>
