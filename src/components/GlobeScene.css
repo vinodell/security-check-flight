@@ -1,0 +1,30 @@
+.globe-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  isolation: isolate;
+  touch-action: pan-y;
+}
+
+.globe-scene__canvas,
+.globe-scene__fallback {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.globe-scene__shadow {
+  position: absolute;
+  bottom: 5%;
+  left: 25%;
+  width: 50%;
+  height: 7%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgb(40 84 105 / 17%) 0%, rgb(40 84 105 / 5%) 42%, transparent 70%);
+  filter: blur(7px);
+  transform: scaleY(0.55);
+  pointer-events: none;
+}
